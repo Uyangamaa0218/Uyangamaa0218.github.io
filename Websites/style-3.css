@@ -1,0 +1,100 @@
+/* Custom colour properties */
+:root {
+    --main-color: #f4f4f4;
+    --secondary-color: #333;
+    --background-color: #666;
+    --text-color: #fff;
+    --section-padding: 20px;
+}
+
+/*General page styles*/
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+/*Heading styles*/
+h1, 
+h2 {
+    color: var(--main-color);
+}
+
+/*Section styles*/
+
+.intro {
+    background-color: white;
+    padding: var(--section-padding);
+    border-left: 5px solid var(--main-color);
+}
+
+.about {
+    background-color: var(--secondary-color);
+    padding: var(--section-padding);
+}
+
+.conclusion {
+    background-color: white;
+    padding: var(--section-padding);
+    border-left: 5px solid var(--main-color);
+}
+
+/*Specific styles for the page-3.html */
+
+header {
+    padding: 24px;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 16px;
+}
+
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 32px;
+    padding: 20px;
+}
+
+footer {
+    padding: 20px;
+    margin-top: 24px;
+}
+
+/* Responsive style for page-3.html */
+@media screen and (max-width: 600px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    section {
+        padding: 12px;
+    }
+    footer {
+        padding: 12px;
+    }
+}
+
+body {
+    background-color: #f4f4f4;
+}       
+nav {
+    color: #333;
+}
+nav a {
+    color: #555;
+}
+section {
+    background-color: #666;
+}
+footer {
+    background-color: #333;
+    color: #fff;
+}
+

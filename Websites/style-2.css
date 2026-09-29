@@ -1,0 +1,64 @@
+/*Specific styles for the page-2.html file*/
+
+h1 {
+    font-size: 2.4rem;
+    margin-bottom: 24px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+ul {
+    padding-left: 32px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+p {
+    max-width: 800px;
+}
+
+/* Responsive style for page-2.html */
+@media screen and (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+    h2 {
+        font-size: 1.4rem;
+    }
+    p {
+        max-width: 100%;
+    }
+    ul {
+        padding-left: 20px;
+    }
+    li {
+        margin-bottom: 6px;
+    }
+    p {
+        max-width: 100%;
+    }       
+}
+body {
+    background-color: #f4f4f4;
+}   
+h1 {
+    color: #333;
+}
+h2 {
+    color: #555;
+}      
+ul {
+    color: #666;
+}
+li {
+    color: #666;
+} 
+h3 {
+    color: #777;
+}
+
+
