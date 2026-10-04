@@ -1,46 +1,82 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uyangamaa - 81572</title>
-    <meta name="description"
-          content="A sample web page with semantic sections.">
-<link rel="stylesheet" href="global.css">
-<link rel="stylesheet" href="style-3.css">
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Page with Sections</title>
+<meta name="description" content="A sample web page with multiple sections.">
+
+ <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+
+header {
+    @apply pt-8 px-[9%] pb-[42px] md:py-[3%] md:px-[20%];
+}
+
+section {   
+    @apply pt-8 px-[9%] pb-[42px] md:py-[3%] md:px-[20%];
+}
+
+section h2 {   
+    @apply mt-8;
+}
+
+section h3 {   
+    @apply mt-6;
+}
+
+section p {   
+    @apply mb-4;
+}
+    </style>
+</head>    
+    
 <body>
+
+ <!-- Navigation menu with logo -->
+  <nav></nav>
+
+
+ <!-- Hero block -->
     <header>
-        <h1>My Web Page</h1>
-        <p>A page demonsrating semantic HTML elements.</p>
+        <h1>Big heading</h1>
+        <h2>Smaller sub-heading</h2>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="page-1.html">A Tale of Two Cities</a></li>
-            <li><a href="page-2.html">Purple Rain</a></li>
-        </ul>
-    </nav>
+    <!-- Main content of web page in sections -->
     <main>
-        <section class="intro">
-            <h2>Introduction</h2>
-            <p>This is a sample web page that demonstrates the use of semantic HTML elements such as header, nav, main, section, article, and footer.</p>
+        <section>
+            <h2>Smaller Heading</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima exercitationem, fuga doloribus sequi sint eveniet nobis nulla obcaecati quibusdam quae, quia aliquam mollitia ea vel ullam dolores natus in quisquam?</p>
+
+            
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam non mollitia, unde corporis odit est suscipit, nobis laudantium rerum magnam accusamus eaque nam aut dolores blanditiis voluptate! Voluptatibus, adipisci accusantium!</p>
         </section>
 
-        <section class="about">
-            <h2>About This Page</h2>
-            <p>This page is designed to showcase the structure and organization of a web page using semantic HTML elements. It includes a header, navigation menu, main content area, sections, articles, and a footer.</p>
+        <section>
+            <h2>Smaller Heading</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima exercitationem, fuga doloribus sequi sint eveniet nobis nulla obcaecati quibusdam quae, quia aliquam mollitia ea vel ullam dolores natus in quisquam?</p>
+
+            <p>lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam non mollitia, unde corporis odit est suscipit, nobis laudantium rerum magnam accusamus eaque nam aut dolores blanditiis voluptate! Voluptatibus, adipisci accusantium!</p>
         </section>
-        <section class="conclusion">
-            <h3>Conclusion</h3>
-            <p>Semantic HTML elements help improve the accessibility and search engine optimization of web pages. They provide meaning to the content and make it easier for users and search engines to understand the structure of the page.</p>
+
+        <section>
+            <h2>Smaller Heading</h2>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minima exercitationem, fuga doloribus sequi sint eveniet nobis nulla obcaecati quibusdam quae, quia aliquam mollitia ea vel ullam dolores natus in quisquam?</p>
+
+            <p>lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam non mollitia, unde corporis odit est suscipit, nobis laudantium rerum magnam accusamus eaque nam aut dolores blanditiis voluptate! Voluptatibus, adipisci accusantium!</p>
+
+            <p><a href="index.html">Back to Home</a></p>
+        
+        
         </section>
+    
     </main>
-
-    <footer>
-        <p>Created by Uyangamaa.</p>
-        <a href="index.html">Back to Home</a>
-    </footer>
+    
 </body>
+    
 </html>
+    
+    
