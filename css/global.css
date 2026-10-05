@@ -1,0 +1,49 @@
+:root {
+    --font-sans: "Inter", Arial, sans-serif;
+
+    --fs-md: 1rem;
+    --fs-lg: 1.25rem;
+    --fs-xl: 1.75rem;
+    --fs-xxxl: 3.5rem;
+}
+
+body {
+    font-family: var(--font-sans);
+    text-align: center;
+    background-color: lightgreen;
+}
+
+h1 {
+    font-size: var(--fs-xxxl);
+    line-height: 1.2;
+    text-align: center;
+    font-weight: normal;
+    letter-spacing: -3px;
+}
+
+h2 {
+    font-size: var(--fs-xl);
+    line-height: 1.2;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    font-weight: normal;
+    letter-spacing: 2px;
+}
+
+h3 {
+    font-size: var(--fs-lg);
+    margin-top: 48px;
+    margin-bottom: 24px;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+p {
+    font-size: var(--fs-md);
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+a {
+    color: darkgreen;
+}
