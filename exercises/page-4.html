@@ -12,7 +12,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
-        header {
+
+        body { @apply font-['Merriweather']; }
+
+    header {
         @apply flex flex-col justify-around items-center w-full mx-auto
             bg-blue-800
             px-12 lg:px-60 py-8 lg:py-14;
@@ -45,6 +48,11 @@
     section *:last-child { @apply mb-0! }
 
 </style>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
 
