@@ -1,0 +1,20 @@
+INSTRUCTIONS:
+
+Let's extend our existing Hero Block Generator.
+
+Use the current code supplied below as your starting point.
+
+Preserve all existing working features. Extend the existing settings object and named functions where appropriate.
+
+Include any new hero styling in the shared hero stylesheet so it is also included in the exported page.
+
+Add only the requested feature. Avoid unrelated redesigns or refactoring.
+
+NEW FEATURE:
+
+
+Return the complete updated HTML in one code block.
+
+
+CURRENT CODE:
+

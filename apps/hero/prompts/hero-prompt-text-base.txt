@@ -1,0 +1,166 @@
+Build a simple Hero Block Generator for students learning frontend development.
+
+Create one complete app-hero-text-v1.html file using semantic HTML, Tailwind CSS and vanilla JavaScript. Do not use frameworks, npm or a build process.
+
+Include the following meta description tag in the head of both the app and the exported HTML page:
+
+<meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+
+Load Tailwind using:
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+The app should open with a working hero preview. Keep its interface simple, attractive and suitable for beginners.
+
+HERO CONTENT
+
+Use a semantic header element containing:
+- An h1: “Lorem ipsum dolor sit amet”
+- An optional h2, visible by default: “Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.”
+
+Allow users to click directly into either visible heading and edit its text in the browser. Use contenteditable, with a visible focus outline and accessible labels. Preserve the semantic h1 and h2 elements.
+
+Treat edited content as plain text. Pasting must not introduce formatting or additional HTML elements.
+
+Place a short instruction outside the hero: “Click a heading to edit the text.”
+
+CONTROLS
+
+Place a compact, clearly labelled control panel above the hero, outside the generated content. Do not use a form element.
+
+Include exactly four native checkbox controls. Each checkbox must have a clickable text label, visible keyboard focus and a clear checked state.
+
+1. “Dark appearance”
+   - Default: unchecked.
+   - Unchecked: light appearance, using bg-slate-50, H1 text-slate-900 and H2 text-slate-700.
+   - Checked: dark appearance, using bg-slate-900, H1 text-slate-50 and H2 text-slate-300.
+
+2. “Centre text”
+   - Default: unchecked.
+   - Unchecked: left-align both headings.
+   - Checked: centre-align both headings and centre their constrained content blocks.
+
+3. “Minimum height”
+   - Default: checked.
+   - Checked: apply min-h-[480px] md:min-h-[85vh].
+   - Unchecked: remove the minimum-height styling, allowing content and padding to determine the height.
+
+4. “Show subheading”
+   - Default: checked.
+   - Checked: display the editable h2.
+   - Unchecked: hide the h2 so it takes up no space and cannot receive keyboard focus.
+   - Preserve any edited subheading text when switching it off and back on.
+   - Include the h2 in the copied HTML only when this checkbox is checked. Otherwise, omit the element entirely.
+   - Keep the h1 visible and editable at all times.
+
+Arrange the controls in a compact row where space allows, wrapping neatly on smaller screens.
+
+Read each checkbox’s checked property in JavaScript. Changes should update the hero immediately without resetting the edited text.
+
+HERO LAYOUT
+
+Use mobile-first Tailwind styling with the md breakpoint at 768px.
+
+Use:
+- Vertically centred content.
+- Comfortable horizontal and vertical padding.
+- Responsive H1 and H2 sizes.
+- Sensible maximum text widths.
+- Enough space between the headings when the H2 is visible.
+- A layout that expands for long text without clipping or horizontal overflow.
+
+Keep typography and spacing fixed in this version. Do not offer additional design controls.
+
+STYLING APPROACH
+
+Keep styling in the head of the page, using a style element with type="text/tailwindcss", placed after the hosted Tailwind script.
+
+Within this style element, use named CSS classes and Tailwind’s @apply directive.
+
+Use readable class names such as:
+- hero
+- hero-content
+- hero-light
+- hero-dark
+- hero-centre
+- hero-min-height
+
+Use descendant selectors such as .hero h1 and .hero h2 for heading styles.
+
+The HTML should use named classes rather than long lists of Tailwind utility classes. Do not use inline style attributes.
+
+Use ordinary CSS within the same style element where appropriate, such as for focus outlines.
+
+JavaScript should toggle the relevant named classes when checkbox settings change. Keep the base hero class in place.
+
+For the subheading visibility control, use the hidden property and ensure that the CSS respects it.
+
+Also group the app interface styles into named CSS classes in the head.
+
+Keep the hero CSS shared between preview and export so that they remain consistent. A clear approach is to store the hero styles in their own style element and the editor interface styles in another, both in the head.
+
+COPY HTML
+
+Add a “Copy HTML” button fixed in the bottom-right corner of the viewport. Ensure that users can scroll content clear of the fixed button.
+
+On activation, copy a complete standalone HTML document containing:
+- HTML5 doctype and lang="en".
+- Charset, responsive viewport, title and the exact meta description specified above.
+- The hosted Tailwind script.
+- A style element with type="text/tailwindcss" containing all CSS needed by the exported hero.
+- The semantic hero header with the current heading text and named classes.
+- The h2 only when “Show subheading” is checked.
+
+Exclude the app controls, editing attributes, editing outlines, instructions, Copy HTML button, editor-only CSS and generator JavaScript from the copied document.
+
+Read the latest heading text when copying. Escape text correctly so characters such as &, < and > remain text in the exported HTML.
+
+Use the Clipboard API and handle failure gracefully. If copying is unavailable, show the generated HTML in a labelled, read-only textarea for manual copying. Keep this textarea up to date if the user subsequently changes the text or settings.
+
+Do not show a success message unless copying succeeds.
+
+Display a brief accessible status message such as “HTML copied—paste it into VS Code.”
+
+CODE QUALITY
+
+Keep the JavaScript beginner-friendly:
+- Descriptive variable names.
+- A small settings object containing the four checkbox settings.
+- Named functions with clear responsibilities.
+- addEventListener rather than inline event handlers.
+- Brief comments explaining the main steps.
+
+Use the same styling and settings logic for the preview and exported HTML so they match.
+
+Avoid replacing the editable heading elements when settings change, so the user’s text and editing position are preserved.
+
+Ensure that any closing script tag inside a JavaScript string is escaped correctly so it does not prematurely end the generator’s script.
+
+SCOPE
+
+Do not add dropdown lists, colour palettes, gradients, images, video, downloads, font selectors, call-to-action links or extra features.
+
+DELIVERY AND TESTING
+
+Return the complete app-hero-text-v1.html code in one HTML code block, without omissions or placeholders. Include all required JavaScript in the file.
+
+We will copy this code into VS Code and test it in a web browser. Do not require ChatGPT preview, hosting or automatic browser-testing features.
+
+After the code, provide:
+1. Brief instructions for saving and opening the file.
+2. A short manual checklist covering text editing, all four checkboxes, responsive layout and Copy HTML.
+3. A beginner-friendly explanation of the main JavaScript functions.
+4. A short explanation of how HTML classes connect to CSS selectors, how @apply groups Tailwind utilities, and how JavaScript toggles classes.
+5. An explanation of how a checkbox’s checked property returns true or false.
+
+Include checks that:
+- Changing a checkbox preserves edited heading text.
+- Hiding and restoring the H2 preserves its edited text.
+- A hidden H2 occupies no space and cannot receive keyboard focus.
+- Long headings expand the hero without clipping.
+- Copied HTML reflects the latest text and checkbox settings.
+- The H2 is omitted entirely from exported HTML when switched off.
+- Exported HTML contains the required hero CSS in the head.
+- Exported HTML contains no editing interface, editing attributes or editor-only CSS.
+- The copied page renders correctly when saved as a separate HTML file.
+
+If an interactive preview is available, you may provide it as an additional convenience. Clearly state whether the app has actually been browser-tested.

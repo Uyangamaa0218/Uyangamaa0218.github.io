@@ -1,0 +1,334 @@
+INSTRUCTIONS:
+
+Let's extend our existing Hero Block Generator.
+
+Use the current code supplied below as your starting point.
+
+Preserve all existing working features. Extend the existing settings object and named functions where appropriate.
+
+Include any new hero styling in the shared hero stylesheet so it is also included in the exported page.
+
+Add only the requested feature. Avoid unrelated redesigns or refactoring.
+
+NEW FEATURE:
+
+INSTRUCTIONS
+
+Let's adapt our existing Hero Block Generator to create hero blocks with an image background and a tinted overlay.
+
+The current working app file is app-hero-text-v4.html. Create the new app, named app-hero-image-v1.html.
+
+Use the current code supplied below as your starting point.
+
+Preserve existing working features except those explicitly replaced below. Extend the existing settings object and named functions where appropriate. Avoid unrelated redesigns or refactoring.
+
+NEW FEATURES AND CHANGES
+
+IMAGE BACKGROUND
+
+Replace the solid and gradient background options with a fixed image background.
+
+Assume this folder structure:
+
+- The app file is saved directly in the hero folder.
+- The placeholder image is saved at outputs/assets/img/hero-image.jpg.
+- Generated HTML pages will be saved directly in the outputs folder.
+
+Use these exact relative paths:
+
+- App preview: outputs/assets/img/hero-image.jpg
+- Exported page: assets/img/hero-image.jpg
+
+Do not add an image URL input or upload control in this version.
+
+Make the image cover the entire hero without stretching, centred horizontally and vertically. Allow cropping as the viewport changes.
+
+In the head of the app, include:
+
+<link rel="preload" as="image" href="outputs/assets/img/hero-image.jpg">
+
+In the head of the exported page, include:
+
+<link rel="preload" as="image" href="assets/img/hero-image.jpg">
+
+For each page, ensure its preload link and background-image rule reference exactly the same path.
+
+Define the exported image path once in JavaScript:
+
+const exportedImagePath = "assets/img/hero-image.jpg";
+
+Use this constant when generating both the exported preload link and the exported background-image rule.
+
+TINTED OVERLAY
+
+Place a separate overlay layer between the image and the heading content.
+
+Defaults:
+
+- Solid black overlay.
+- Opacity: 0.4.
+- Gradient overlay: off.
+
+Add a native range slider labelled “Overlay opacity”:
+
+- Minimum: 0.1.
+- Maximum: 0.9.
+- Step: 0.05.
+- Default: 0.4.
+- Display the current numeric value beside the slider.
+- Update the preview immediately as the slider moves.
+
+Apply opacity only to the overlay layer. The image and heading content must remain fully opaque.
+
+Ensure the overlay does not intercept pointer events or prevent users from editing the headings.
+
+OVERLAY COLOURS
+
+Reuse the existing Tailwind colour palette.
+
+In solid-overlay mode, provide these palette targets:
+
+- Overlay colour.
+- H1.
+- H2.
+
+Select Overlay colour initially.
+
+Add a “Gradient overlay” checkbox, unchecked by default.
+
+When checked:
+
+- Replace Overlay colour with Start colour and End colour targets.
+- Keep H1 and H2 targets available.
+- Show a Direction dropdown with:
+  - Left to right: to right — default.
+  - Right to left: to left.
+  - Top to bottom: to bottom.
+  - Bottom to top: to top.
+
+On first enabling the gradient, use the current solid overlay colour as the start colour and blue-500 as the end colour.
+
+Apply the opacity slider value to the entire gradient overlay. Do not apply opacity separately to its individual colour stops.
+
+Preserve solid and gradient colour choices, gradient direction and opacity when switching modes.
+
+When returning to solid-overlay mode, remove the gradient background image from the overlay layer and restore the saved solid overlay colour. Keep the hero image visible underneath.
+
+Keep the active palette target visible and enabled. If a mode change hides the active target, select Start colour in gradient mode or Overlay colour in solid mode.
+
+Preserve the palette's existing colour families, shades, black and white options, accessible names, keyboard support, selected states and responsive scrolling.
+
+TEXT AND EXISTING CONTROLS
+
+Remove the “Dark appearance preset” checkbox and its associated preset-reset behaviour.
+
+Default both H1 and H2 to white. Retain their independent colour choices through the palette.
+
+Apply a fixed Tailwind text-shadow-lg/30 effect to both headings through @apply in the shared hero stylesheet. This is a text shadow, not a box shadow. Do not add a shadow control.
+
+Preserve:
+
+- Direct plain-text editing of H1 and H2.
+- The optional H2 and its Show subheading checkbox.
+- Independent font-family choices.
+- Independent letter-spacing sliders.
+- Left or centre alignment.
+- The minimum-height checkbox and existing responsive heights.
+- Existing responsive spacing and typography.
+- Preservation of edited text and settings when controls change.
+
+Disable H2 controls and its palette target while the subheading is hidden. Preserve its settings when it is restored. If H2 was the active palette target, select Start colour in gradient mode or Overlay colour in solid mode.
+
+HTML AND CSS
+
+Keep the semantic header element for the hero.
+
+Use clearly named classes for the image background, overlay and content layers. Establish their stacking order explicitly so the headings remain above the overlay.
+
+Mark decorative image and overlay elements with aria-hidden="true".
+
+Keep all styling in style elements in the head, using named classes, Tailwind @apply and ordinary CSS where appropriate. Do not use inline style attributes.
+
+Retain the hosted Tailwind script:
+
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+Place styles containing @apply in style elements with type="text/tailwindcss".
+
+Use Tailwind palette variables for overlay and heading colours. Ensure the required variables are available in both the app and the exported page.
+
+Use CSS linear-gradient() for gradient overlays.
+
+Keep the styles shared between preview and export wherever possible. Handle the different image paths explicitly so each page loads the image from its correct location.
+
+COPY HTML
+
+Preserve the fixed Copy HTML button, accessible status message and manual-copy fallback.
+
+Export a complete standalone HTML document containing:
+
+- HTML5 doctype and lang="en".
+- Charset, responsive viewport and title.
+- The existing meta description:
+  “Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.”
+- The hosted Tailwind script.
+- The image preload link.
+- All required hero, image, overlay and text styles in the head.
+- The semantic hero markup with the current heading text and selected settings.
+- H2 only when Show subheading is checked.
+
+Use assets/img/hero-image.jpg for both the preload and background image in the exported page.
+
+Do not include outputs/assets/img/hero-image.jpg in the exported page.
+
+Exclude editor controls, editing attributes, editing outlines, editor-only CSS and generator JavaScript.
+
+Continue escaping edited text correctly and keep any visible manual-copy output up to date.
+
+Use the Clipboard API and handle failure gracefully. Only display a copying-success message after copying succeeds.
+
+Ensure any closing script tag inside a JavaScript string is escaped correctly so it does not prematurely end the generator's script.
+
+DELIVERY
+
+Return the complete app-hero-image-v1.html code in one HTML code block, without omissions. Include all required JavaScript.
+
+After the code, briefly explain where to save:
+
+- The app: hero/app-hero-image-v1.html
+- The image: hero/outputs/assets/img/hero-image.jpg
+- A generated page, for example: hero/outputs/hero-image.html
+
+Explain that the generated page must be saved directly in outputs for its relative image path to work.
+
+Include a short manual checklist covering:
+
+- Image loading in both the app and exported page.
+- Matching exported preload and background-image paths.
+- Solid and gradient overlay colours.
+- All four gradient directions.
+- Opacity changes without fading the headings.
+- Preservation of settings when switching overlay modes.
+- Existing text controls and H2 visibility.
+- Copy HTML, its manual fallback and the exported result.
+
+Clearly state whether the app has actually been browser-tested.
+Return the complete updated HTML in one code block.
+
+
+CURRENT CODE:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Section</title>
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+
+        .hero {
+          @apply flex flex-col justify-center px-6 py-16 md:px-12 md:py-20;
+        }
+
+        .hero-light {
+          @apply bg-slate-50;
+        }
+
+        .hero-dark {
+          @apply bg-slate-900;
+        }
+
+        .hero-centre {
+          @apply text-center;
+        }
+
+        .hero-min-height {
+          @apply min-h-[480px] md:min-h-[85vh];
+        }
+
+        .hero-content {
+          @apply w-full max-w-5xl;
+        }
+
+        .hero h1 {
+          @apply max-w-5xl font-sans text-4xl font-bold leading-tight tracking-tight break-words md:text-6xl;
+        }
+
+        .hero h2 {
+          @apply mt-6 max-w-3xl font-sans text-lg leading-relaxed break-words md:text-2xl;
+        }
+
+        .hero h1.hero-h1-serif {
+          @apply font-serif;
+        }
+
+        .hero h2.hero-h2-serif {
+          @apply font-serif;
+        }
+
+        .hero-light h1 {
+          @apply text-slate-900;
+        }
+
+        .hero-light h2 {
+          @apply text-slate-700;
+        }
+
+        .hero-dark h1 {
+          @apply text-slate-50;
+        }
+
+        .hero-dark h2 {
+          @apply text-slate-300;
+        }
+
+        .hero-centre .hero-content {
+          @apply mx-auto;
+        }
+
+        .hero-centre h1,
+        .hero-centre h2 {
+          @apply mx-auto;
+        }
+
+        /* Custom colours override preset background and text colours. */
+        .hero.hero-custom-colours {
+          background-color: var(--color-amber-300);
+          background-image: linear-gradient(to right, var(--color-amber-300), var(--color-blue-500));
+        }
+
+        .hero.hero-custom-colours h1 {
+          color: var(--color-slate-50);
+        }
+
+        .hero.hero-custom-colours h2 {
+          color: var(--color-slate-300);
+        }
+
+        .hero h2[hidden] {
+          display: none !important;
+        }
+      
+  </style>
+  <style>
+
+.hero h1 {
+  letter-spacing: -0.05em;
+}
+
+.hero h2 {
+  letter-spacing: -0.025em;
+}
+  </style>
+</head>
+<body>
+  <header class="hero hero-dark hero-min-height hero-custom-colours">
+    <div class="hero-content">
+      <h1 class="">Lorem ipsum dolor sit amet</h1>
+      <h2 class="">Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
+    </div>
+  </header>
+</body>
+</html>

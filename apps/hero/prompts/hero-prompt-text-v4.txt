@@ -1,0 +1,1473 @@
+INSTRUCTIONS:
+
+Let's extend our existing Hero Block Generator.
+
+Use the current code supplied below as your starting point.
+
+Preserve all existing working features. Extend the existing settings object and named functions where appropriate.
+
+Include any new hero styling in the shared hero stylesheet so it is also included in the exported page.
+
+Add only the requested feature. Avoid unrelated redesigns or refactoring.
+
+NEW FEATURE:
+Add a “Gradient background” checkbox, unchecked by default.
+
+When unchecked, retain solid backgrounds and the Background colour target.
+
+When checked, replace Background with Start colour and End colour targets using the existing palette. Show a Direction dropdown with four choices: Left to right (to right, default), Right to left (to left), Top to bottom (to bottom), and Bottom to top (to top).
+
+On first enabling the gradient, use the current solid colour as its start colour and blue-500 as its end colour. Preserve both gradient colours and direction when switching it off and back on.
+
+Keep H1/H2 colour selection working. Ensure the active palette target is always visible and enabled. If switching modes hides the active target, select Start colour in gradient mode or Background in solid mode. Use the same fallback when hiding an active H2 target.
+
+Apply CSS linear-gradient() using Tailwind colour variables in the shared colour stylesheet in the head. Include it in exported HTML and do not use inline styles.
+
+Switching back to solid mode must set background-image to none and restore the saved solid colour.
+
+The Dark appearance preset should reset the saved solid background and heading colours, while preserving gradient colours, direction and whether gradient mode is enabled.
+
+Update immediately and preserve all existing features.
+
+Return the complete updated HTML in one code block.
+
+
+CURRENT CODE:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Block Generator</title>
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Shared hero stylesheet used by both the preview and exported page. -->
+  <style id="hero-styles" type="text/tailwindcss">
+    .hero {
+      @apply flex flex-col justify-center px-6 py-16 md:px-12 md:py-20;
+    }
+
+    .hero-light {
+      @apply bg-slate-50;
+    }
+
+    .hero-dark {
+      @apply bg-slate-900;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-5xl font-sans text-4xl font-bold leading-tight tracking-tight break-words md:text-6xl;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl font-sans text-lg leading-relaxed break-words md:text-2xl;
+    }
+
+    .hero h1.hero-h1-serif {
+      @apply font-serif;
+    }
+
+    .hero h2.hero-h2-serif {
+      @apply font-serif;
+    }
+
+    .hero-light h1 {
+      @apply text-slate-900;
+    }
+
+    .hero-light h2 {
+      @apply text-slate-700;
+    }
+
+    .hero-dark h1 {
+      @apply text-slate-50;
+    }
+
+    .hero-dark h2 {
+      @apply text-slate-300;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+
+    .hero-centre h1,
+    .hero-centre h2 {
+      @apply mx-auto;
+    }
+
+    /* Custom colour rules take precedence over the light/dark presets. */
+    .hero.hero-custom-colours {
+      background-color: var(--color-slate-50);
+    }
+
+    .hero.hero-custom-colours h1 {
+      color: var(--color-slate-900);
+    }
+
+    .hero.hero-custom-colours h2 {
+      color: var(--color-slate-700);
+    }
+
+    .hero h2[hidden] {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Dedicated heading letter-spacing stylesheet. -->
+  <style id="hero-effect-styles">
+    .hero h1 {
+      letter-spacing: -0.05em;
+    }
+
+    .hero h2 {
+      letter-spacing: -0.025em;
+    }
+  </style>
+
+  <!-- Independently generated Tailwind colour swatch rules. -->
+  <style id="palette-swatch-styles"></style>
+
+  <!-- Generator interface styles. -->
+  <style type="text/tailwindcss">
+    .app-shell {
+      @apply min-h-screen bg-white text-slate-900;
+    }
+
+    .app-container {
+      @apply mx-auto w-full max-w-6xl px-4 py-6 pb-32 sm:px-6 md:py-10;
+    }
+
+    .app-title {
+      @apply text-2xl font-bold tracking-tight sm:text-3xl;
+    }
+
+    .app-description {
+      @apply mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base;
+    }
+
+    .control-panel {
+      @apply mt-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm;
+    }
+
+    .control-heading {
+      @apply text-sm font-semibold text-slate-800;
+    }
+
+    .control-list {
+      @apply mt-3 flex flex-wrap items-center gap-x-5 gap-y-3;
+    }
+
+    .control-option {
+      @apply inline-flex cursor-pointer items-center gap-2 rounded-md text-sm text-slate-700;
+    }
+
+    .control-checkbox {
+      @apply size-4 cursor-pointer accent-slate-900;
+    }
+
+    .control-checkbox:focus-visible,
+    .control-slider:focus-visible {
+      outline: 3px solid #64748b;
+      outline-offset: 3px;
+    }
+
+    .effect-groups {
+      @apply mt-4 grid grid-cols-1 gap-4 border-t border-slate-200 pt-4 md:grid-cols-2;
+    }
+
+    .effect-group {
+      @apply min-w-0 rounded-lg border border-slate-200 bg-slate-50 p-3;
+    }
+
+    .effect-heading {
+      @apply text-sm font-semibold text-slate-800;
+    }
+
+    .effect-option {
+      @apply mt-3 flex flex-wrap items-center gap-2;
+    }
+
+    .slider-group {
+      @apply mt-4;
+    }
+
+    .slider-label-row {
+      @apply flex items-center justify-between gap-3;
+    }
+
+    .slider-label {
+      @apply text-sm text-slate-700;
+    }
+
+    .slider-value {
+      @apply min-w-20 text-right font-mono text-sm text-slate-700;
+    }
+
+    .control-slider {
+      @apply mt-2 block w-full cursor-pointer accent-slate-900;
+    }
+
+    .effect-group:has(:disabled) {
+      @apply opacity-60;
+    }
+
+    .control-option:has(:disabled),
+    .control-slider:disabled {
+      cursor: not-allowed;
+    }
+
+    /* Colour palette interface. */
+    .palette-section {
+      @apply mt-4 border-t border-slate-200 pt-4;
+    }
+
+    .palette-description {
+      @apply mt-2 text-sm leading-relaxed text-slate-600;
+    }
+
+    .palette-targets {
+      @apply mt-4 flex flex-wrap gap-2;
+    }
+
+    .palette-target {
+      @apply inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100;
+    }
+
+    .palette-target[aria-pressed="true"] {
+      @apply border-slate-900 bg-slate-900 text-white;
+    }
+
+    .palette-target:focus-visible,
+    .colour-swatch:focus-visible {
+      outline: 3px solid #0ea5e9;
+      outline-offset: 3px;
+    }
+
+    .palette-target:disabled {
+      @apply cursor-not-allowed opacity-40;
+    }
+
+    .target-colour-name {
+      @apply text-xs font-normal;
+    }
+
+    .palette-target[aria-pressed="true"] .target-colour-name {
+      @apply text-slate-200;
+    }
+
+    .active-colour-summary {
+      @apply mt-4 flex flex-wrap items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-3;
+    }
+
+    .active-colour-chip {
+      @apply size-8 shrink-0 rounded-md border border-slate-300;
+    }
+
+    .active-colour-copy {
+      @apply min-w-0;
+    }
+
+    .active-colour-label {
+      @apply text-xs text-slate-500;
+    }
+
+    .active-colour-name {
+      @apply mt-1 text-sm font-semibold text-slate-900;
+    }
+
+    .palette-scroll {
+      @apply mt-4 max-w-full overflow-x-auto overscroll-x-contain rounded-lg border border-slate-200;
+    }
+
+    .palette-grid {
+      display: grid;
+      grid-template-columns: 90px repeat(10, 38px);
+      width: max-content;
+      min-width: 100%;
+      gap: 0;
+    }
+
+    .palette-column-heading {
+      @apply flex items-center justify-center border-b border-slate-200 bg-slate-50 px-1 py-3 text-xs font-semibold text-slate-600;
+    }
+
+    .palette-family {
+      @apply sticky left-0 z-10 flex items-center border-b border-r border-slate-200 bg-white px-2 py-2 text-xs font-semibold text-slate-700;
+    }
+
+    .palette-cell {
+      @apply flex items-center justify-center border-b border-slate-100 p-1;
+    }
+
+    .colour-swatch {
+      @apply relative size-7 shrink-0 rounded-md border border-black/10 transition-transform hover:scale-110;
+    }
+
+    .colour-swatch[aria-pressed="true"] {
+      outline: 3px solid #0f172a;
+      outline-offset: 2px;
+      z-index: 1;
+    }
+
+    .colour-swatch[aria-pressed="true"]::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--swatch-check-colour, #0f172a);
+      font-size: 15px;
+      font-weight: 800;
+      text-shadow: 0 0 2px white, 0 0 3px white;
+    }
+
+    .palette-special-colours {
+      @apply mt-4 flex flex-wrap items-center gap-3;
+    }
+
+    .palette-special-label {
+      @apply mr-1 text-xs font-semibold text-slate-600;
+    }
+
+    .special-colour-option {
+      @apply flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2;
+    }
+
+    .special-colour-option .colour-swatch {
+      @apply size-8;
+    }
+
+    .palette-hint {
+      @apply mt-3 text-xs leading-relaxed text-slate-500;
+    }
+
+    .hero-section {
+      @apply mt-6;
+    }
+
+    .section-label {
+      @apply mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500;
+    }
+
+    .hero-instructions {
+      @apply mt-3 text-sm text-slate-500;
+    }
+
+    .editable-heading {
+      cursor: text;
+      border-radius: 4px;
+    }
+
+    .editable-heading:focus {
+      outline: 3px solid #0ea5e9;
+      outline-offset: 6px;
+    }
+
+    .copy-button {
+      @apply fixed bottom-5 right-5 z-50 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-slate-700 active:scale-95;
+    }
+
+    .copy-button:focus-visible {
+      outline: 3px solid #0ea5e9;
+      outline-offset: 4px;
+    }
+
+    .fallback-panel {
+      @apply mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4;
+    }
+
+    .fallback-label {
+      @apply block text-sm font-semibold text-amber-950;
+    }
+
+    .fallback-textarea {
+      @apply mt-2 block min-h-48 w-full rounded-lg border border-amber-300 bg-white p-3 font-mono text-xs leading-relaxed text-slate-800;
+      overflow-wrap: anywhere;
+    }
+
+    .fallback-textarea:focus-visible {
+      outline: 3px solid #0ea5e9;
+      outline-offset: 2px;
+    }
+
+    .status-message {
+      @apply mt-4 text-sm text-slate-700;
+    }
+
+    .status-message:empty {
+      display: none;
+    }
+
+    .fallback-panel[hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body class="app-shell">
+  <main class="app-container">
+    <header>
+      <h1 class="app-title">Hero Block Generator</h1>
+
+      <p class="app-description">
+        Edit your headings, experiment with typography and colours, and copy
+        a standalone hero section into your own HTML project.
+      </p>
+    </header>
+
+    <!-- Main hero layout controls. -->
+    <section class="control-panel" aria-labelledby="controls-title">
+      <h2 id="controls-title" class="control-heading">Hero settings</h2>
+
+      <div class="control-list">
+        <label class="control-option" for="dark-appearance">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="dark-appearance"
+          >
+          <span>Dark appearance preset</span>
+        </label>
+
+        <label class="control-option" for="centre-text">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="centre-text"
+          >
+          <span>Centre text</span>
+        </label>
+
+        <label class="control-option" for="minimum-height">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="minimum-height"
+            checked
+          >
+          <span>Minimum height</span>
+        </label>
+
+        <label class="control-option" for="show-subheading">
+          <input
+            class="control-checkbox"
+            type="checkbox"
+            id="show-subheading"
+            checked
+          >
+          <span>Show subheading</span>
+        </label>
+      </div>
+
+      <!-- Independent typography settings for H1 and H2. -->
+      <div class="effect-groups">
+        <section class="effect-group" aria-labelledby="h1-effects-title">
+          <h3 id="h1-effects-title" class="effect-heading">
+            H1 text effects
+          </h3>
+
+          <div class="effect-option">
+            <label class="control-option" for="h1-serif">
+              <input
+                class="control-checkbox"
+                type="checkbox"
+                id="h1-serif"
+              >
+              <span>Serif font</span>
+            </label>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <label class="slider-label" for="h1-letter-spacing">
+                Letter spacing
+              </label>
+
+              <output
+                id="h1-spacing-value"
+                class="slider-value"
+                for="h1-letter-spacing"
+              >-0.050em</output>
+            </div>
+
+            <input
+              class="control-slider"
+              type="range"
+              id="h1-letter-spacing"
+              min="-0.05"
+              max="0.10"
+              step="0.005"
+              value="-0.05"
+            >
+          </div>
+        </section>
+
+        <section class="effect-group" aria-labelledby="h2-effects-title">
+          <h3 id="h2-effects-title" class="effect-heading">
+            H2 text effects
+          </h3>
+
+          <div class="effect-option">
+            <label class="control-option" for="h2-serif">
+              <input
+                class="control-checkbox"
+                type="checkbox"
+                id="h2-serif"
+              >
+              <span>Serif font</span>
+            </label>
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-label-row">
+              <label class="slider-label" for="h2-letter-spacing">
+                Letter spacing
+              </label>
+
+              <output
+                id="h2-spacing-value"
+                class="slider-value"
+                for="h2-letter-spacing"
+              >-0.025em</output>
+            </div>
+
+            <input
+              class="control-slider"
+              type="range"
+              id="h2-letter-spacing"
+              min="-0.05"
+              max="0.10"
+              step="0.005"
+              value="-0.025"
+            >
+          </div>
+        </section>
+      </div>
+
+      <!-- Shared colour palette with three independently selectable targets. -->
+      <section class="palette-section" aria-labelledby="palette-title">
+        <h3 id="palette-title" class="control-heading">Hero colours</h3>
+
+        <p class="palette-description">
+          Choose a target, then select a Tailwind colour. Each target can
+          have its own colour.
+        </p>
+
+        <div class="palette-targets" aria-label="Choose which element to colour">
+          <button
+            type="button"
+            class="palette-target"
+            id="target-background"
+            data-target="background"
+            aria-pressed="true"
+          >
+            <span>Background</span>
+            <span class="target-colour-name" id="background-target-name">slate-50</span>
+          </button>
+
+          <button
+            type="button"
+            class="palette-target"
+            id="target-h1"
+            data-target="h1"
+            aria-pressed="false"
+          >
+            <span>H1</span>
+            <span class="target-colour-name" id="h1-target-name">slate-900</span>
+          </button>
+
+          <button
+            type="button"
+            class="palette-target"
+            id="target-h2"
+            data-target="h2"
+            aria-pressed="false"
+          >
+            <span>H2</span>
+            <span class="target-colour-name" id="h2-target-name">slate-700</span>
+          </button>
+        </div>
+
+        <div class="active-colour-summary" aria-live="polite" aria-atomic="true">
+          <span id="active-colour-chip" class="active-colour-chip" aria-hidden="true"></span>
+          <div class="active-colour-copy">
+            <p class="active-colour-label">Selected target and colour</p>
+            <p id="active-colour-name" class="active-colour-name">
+              Background: slate-50
+            </p>
+          </div>
+        </div>
+
+        <div
+          id="palette-scroll"
+          class="palette-scroll"
+          role="region"
+          aria-label="Scrollable Tailwind colour palette"
+          tabindex="0"
+        >
+          <div id="palette-grid" class="palette-grid">
+            <!-- Colour rows and columns are generated by JavaScript. -->
+          </div>
+        </div>
+
+        <div class="palette-special-colours">
+          <span class="palette-special-label">Special colours</span>
+
+          <div class="special-colour-option">
+            <button
+              type="button"
+              class="colour-swatch swatch-black"
+              data-colour="black"
+              aria-label="Black"
+              aria-pressed="false"
+              title="Black"
+            ></button>
+            <span class="text-sm text-slate-700">Black</span>
+          </div>
+
+          <div class="special-colour-option">
+            <button
+              type="button"
+              class="colour-swatch swatch-white"
+              data-colour="white"
+              aria-label="White"
+              aria-pressed="false"
+              title="White"
+            ></button>
+            <span class="text-sm text-slate-700">White</span>
+          </div>
+        </div>
+
+        <p class="palette-hint">
+          Tip: Use the arrow keys or Tab to navigate the palette.
+          Colours are applied independently and override the light/dark preset.
+        </p>
+      </section>
+    </section>
+
+    <!-- Live hero preview. -->
+    <section class="hero-section" aria-labelledby="preview-title">
+      <h2 id="preview-title" class="section-label">Live preview</h2>
+
+      <header
+        id="hero-preview"
+        class="hero hero-light hero-min-height hero-custom-colours"
+      >
+        <div class="hero-content">
+          <h1
+            id="hero-heading"
+            class="editable-heading"
+            contenteditable="plaintext-only"
+            role="textbox"
+            aria-label="Hero main heading. Click to edit."
+            aria-multiline="false"
+            spellcheck="false"
+          >Lorem ipsum dolor sit amet</h1>
+
+          <h2
+            id="hero-subheading"
+            class="editable-heading"
+            contenteditable="plaintext-only"
+            role="textbox"
+            aria-label="Hero subheading. Click to edit."
+            aria-multiline="false"
+            spellcheck="false"
+          >Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
+        </div>
+      </header>
+
+      <p class="hero-instructions">
+        Click a heading to edit the text.
+      </p>
+    </section>
+
+    <!-- Manual-copy fallback appears only when clipboard access fails. -->
+    <section id="fallback-panel" class="fallback-panel" hidden>
+      <label class="fallback-label" for="generated-html">
+        Generated HTML — select and copy manually
+      </label>
+
+      <textarea
+        id="generated-html"
+        class="fallback-textarea"
+        readonly
+        spellcheck="false"
+        aria-describedby="copy-status"
+      ></textarea>
+    </section>
+
+    <p
+      id="copy-status"
+      class="status-message"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></p>
+  </main>
+
+  <button id="copy-html-button" class="copy-button" type="button">
+    Copy HTML
+  </button>
+
+  <script>
+    // Find the preview, headings, controls, and copy interface.
+    const heroPreview = document.getElementById("hero-preview");
+    const heroHeading = document.getElementById("hero-heading");
+    const heroSubheading = document.getElementById("hero-subheading");
+
+    const darkAppearanceCheckbox =
+      document.getElementById("dark-appearance");
+
+    const centreTextCheckbox =
+      document.getElementById("centre-text");
+
+    const minimumHeightCheckbox =
+      document.getElementById("minimum-height");
+
+    const showSubheadingCheckbox =
+      document.getElementById("show-subheading");
+
+    const h1SerifCheckbox = document.getElementById("h1-serif");
+    const h2SerifCheckbox = document.getElementById("h2-serif");
+
+    const h1LetterSpacingSlider =
+      document.getElementById("h1-letter-spacing");
+
+    const h2LetterSpacingSlider =
+      document.getElementById("h2-letter-spacing");
+
+    const h1SpacingValue = document.getElementById("h1-spacing-value");
+    const h2SpacingValue = document.getElementById("h2-spacing-value");
+
+    const heroStylesElement = document.getElementById("hero-styles");
+    const heroEffectStylesElement =
+      document.getElementById("hero-effect-styles");
+
+    const paletteSwatchStylesElement =
+      document.getElementById("palette-swatch-styles");
+
+    const paletteGrid = document.getElementById("palette-grid");
+    const paletteScroll = document.getElementById("palette-scroll");
+
+    const targetBackgroundButton =
+      document.getElementById("target-background");
+
+    const targetH1Button = document.getElementById("target-h1");
+    const targetH2Button = document.getElementById("target-h2");
+
+    const backgroundTargetName =
+      document.getElementById("background-target-name");
+
+    const h1TargetName = document.getElementById("h1-target-name");
+    const h2TargetName = document.getElementById("h2-target-name");
+
+    const activeColourChip = document.getElementById("active-colour-chip");
+    const activeColourName = document.getElementById("active-colour-name");
+
+    const copyHtmlButton = document.getElementById("copy-html-button");
+    const copyStatus = document.getElementById("copy-status");
+    const fallbackPanel = document.getElementById("fallback-panel");
+    const generatedHtmlTextarea = document.getElementById("generated-html");
+
+    // Define the Tailwind palette families and their available shades.
+    const colourFamilies = [
+      "slate",
+      "gray",
+      "zinc",
+      "neutral",
+      "stone",
+      "red",
+      "orange",
+      "amber",
+      "yellow",
+      "lime",
+      "green",
+      "emerald",
+      "teal",
+      "cyan",
+      "sky",
+      "blue",
+      "indigo",
+      "violet",
+      "purple",
+      "fuchsia",
+      "pink",
+      "rose"
+    ];
+
+    const colourShades = [
+      50, 100, 200, 300, 400,
+      500, 600, 700, 800, 900, 950
+    ];
+
+    // Store colours by their Tailwind names, not by arbitrary hex values.
+    const settings = {
+      darkAppearance: darkAppearanceCheckbox.checked,
+      centreText: centreTextCheckbox.checked,
+      minimumHeight: minimumHeightCheckbox.checked,
+      showSubheading: showSubheadingCheckbox.checked,
+
+      h1Serif: h1SerifCheckbox.checked,
+      h2Serif: h2SerifCheckbox.checked,
+
+      h1LetterSpacing: Number(h1LetterSpacingSlider.value),
+      h2LetterSpacing: Number(h2LetterSpacingSlider.value),
+
+      backgroundColour: "slate-50",
+      h1Colour: "slate-900",
+      h2Colour: "slate-700",
+
+      activeColourTarget: "background"
+    };
+
+    // Return a CSS variable name for a Tailwind palette colour.
+    function getTailwindColourVariable(colourName) {
+      return `var(--color-${colourName})`;
+    }
+
+    // Format slider values consistently with their em units.
+    function formatLetterSpacing(value) {
+      return `${Number(value).toFixed(3)}em`;
+    }
+
+    // Create accessible buttons for each colour family and shade.
+    function buildColourPalette() {
+      const paletteRules = [];
+
+      // Add the shade column headings.
+      const emptyCorner = document.createElement("div");
+      emptyCorner.className = "palette-column-heading";
+      emptyCorner.textContent = "Family";
+      paletteGrid.appendChild(emptyCorner);
+
+      for (const shade of colourShades) {
+        const columnHeading = document.createElement("div");
+        columnHeading.className = "palette-column-heading";
+        columnHeading.textContent = shade;
+        columnHeading.setAttribute("aria-label", `Shade ${shade}`);
+        paletteGrid.appendChild(columnHeading);
+      }
+
+      // Build each family as one row.
+      for (const family of colourFamilies) {
+        const familyLabel = document.createElement("div");
+        familyLabel.className = "palette-family";
+        familyLabel.textContent =
+          family.charAt(0).toUpperCase() + family.slice(1);
+
+        paletteGrid.appendChild(familyLabel);
+
+        for (const shade of colourShades) {
+          const colourName = `${family}-${shade}`;
+
+          const cell = document.createElement("div");
+          cell.className = "palette-cell";
+
+          const swatch = document.createElement("button");
+          swatch.type = "button";
+          swatch.className = "colour-swatch";
+          swatch.dataset.colour = colourName;
+          swatch.setAttribute("aria-label", colourName);
+          swatch.setAttribute("aria-pressed", "false");
+          swatch.title = colourName;
+
+          cell.appendChild(swatch);
+          paletteGrid.appendChild(cell);
+
+          // Use Tailwind's own palette variables for the swatch colours.
+          paletteRules.push(`
+            .colour-swatch[data-colour="${colourName}"] {
+              background-color: var(--color-${colourName});
+            }
+          `);
+        }
+      }
+
+      // Add black and white swatch colours.
+      paletteRules.push(`
+        .swatch-black {
+          background-color: var(--color-black);
+        }
+
+        .swatch-white {
+          background-color: var(--color-white);
+        }
+      `);
+
+      paletteSwatchStylesElement.textContent = paletteRules.join("\n");
+    }
+
+    // Return the selected colour name for a target.
+    function getTargetColour(target) {
+      if (target === "background") {
+        return settings.backgroundColour;
+      }
+
+      if (target === "h1") {
+        return settings.h1Colour;
+      }
+
+      return settings.h2Colour;
+    }
+
+    // Return the readable label for the selected target.
+    function getTargetLabel(target) {
+      if (target === "background") {
+        return "Background";
+      }
+
+      if (target === "h1") {
+        return "H1";
+      }
+
+      return "H2";
+    }
+
+    // Create shared CSS rules that override the light/dark presets.
+    function updateHeroColourStyles() {
+      heroStylesElement.textContent = `
+        .hero {
+          @apply flex flex-col justify-center px-6 py-16 md:px-12 md:py-20;
+        }
+
+        .hero-light {
+          @apply bg-slate-50;
+        }
+
+        .hero-dark {
+          @apply bg-slate-900;
+        }
+
+        .hero-centre {
+          @apply text-center;
+        }
+
+        .hero-min-height {
+          @apply min-h-[480px] md:min-h-[85vh];
+        }
+
+        .hero-content {
+          @apply w-full max-w-5xl;
+        }
+
+        .hero h1 {
+          @apply max-w-5xl font-sans text-4xl font-bold leading-tight tracking-tight break-words md:text-6xl;
+        }
+
+        .hero h2 {
+          @apply mt-6 max-w-3xl font-sans text-lg leading-relaxed break-words md:text-2xl;
+        }
+
+        .hero h1.hero-h1-serif {
+          @apply font-serif;
+        }
+
+        .hero h2.hero-h2-serif {
+          @apply font-serif;
+        }
+
+        .hero-light h1 {
+          @apply text-slate-900;
+        }
+
+        .hero-light h2 {
+          @apply text-slate-700;
+        }
+
+        .hero-dark h1 {
+          @apply text-slate-50;
+        }
+
+        .hero-dark h2 {
+          @apply text-slate-300;
+        }
+
+        .hero-centre .hero-content {
+          @apply mx-auto;
+        }
+
+        .hero-centre h1,
+        .hero-centre h2 {
+          @apply mx-auto;
+        }
+
+        /* Custom colours override preset background and text colours. */
+        .hero.hero-custom-colours {
+          background-color: ${getTailwindColourVariable(settings.backgroundColour)};
+        }
+
+        .hero.hero-custom-colours h1 {
+          color: ${getTailwindColourVariable(settings.h1Colour)};
+        }
+
+        .hero.hero-custom-colours h2 {
+          color: ${getTailwindColourVariable(settings.h2Colour)};
+        }
+
+        .hero h2[hidden] {
+          display: none !important;
+        }
+      `;
+    }
+
+    // Update the visible letter-spacing values and their shared CSS rules.
+    function updateLetterSpacingStyles() {
+      h1SpacingValue.textContent =
+        formatLetterSpacing(settings.h1LetterSpacing);
+
+      h2SpacingValue.textContent =
+        formatLetterSpacing(settings.h2LetterSpacing);
+
+      heroEffectStylesElement.textContent = `
+        .hero h1 {
+          letter-spacing: ${settings.h1LetterSpacing}em;
+        }
+
+        .hero h2 {
+          letter-spacing: ${settings.h2LetterSpacing}em;
+        }
+      `;
+    }
+
+    // Update the active target, selected colour labels, and swatch states.
+    function updatePaletteInterface() {
+      const activeTarget = settings.activeColourTarget;
+      const activeColour = getTargetColour(activeTarget);
+
+      targetBackgroundButton.setAttribute(
+        "aria-pressed",
+        String(activeTarget === "background")
+      );
+
+      targetH1Button.setAttribute(
+        "aria-pressed",
+        String(activeTarget === "h1")
+      );
+
+      targetH2Button.setAttribute(
+        "aria-pressed",
+        String(activeTarget === "h2")
+      );
+
+      targetH2Button.disabled = !settings.showSubheading;
+
+      backgroundTargetName.textContent = settings.backgroundColour;
+      h1TargetName.textContent = settings.h1Colour;
+      h2TargetName.textContent = settings.h2Colour;
+
+      activeColourName.textContent =
+        `${getTargetLabel(activeTarget)}: ${activeColour}`;
+
+      activeColourChip.style.setProperty(
+        "--selected-colour",
+        getTailwindColourVariable(activeColour)
+      );
+
+      activeColourChip.style.backgroundColor =
+        `var(--color-${activeColour})`;
+
+      // Each swatch reflects whether it matches the active target.
+      const allSwatches = document.querySelectorAll(
+        ".colour-swatch[data-colour]"
+      );
+
+      for (const swatch of allSwatches) {
+        const isSelected = swatch.dataset.colour === activeColour;
+
+        swatch.setAttribute("aria-pressed", String(isSelected));
+      }
+    }
+
+    // Set one target's colour without changing the other two.
+    function setTargetColour(target, colourName) {
+      if (target === "background") {
+        settings.backgroundColour = colourName;
+      } else if (target === "h1") {
+        settings.h1Colour = colourName;
+      } else if (target === "h2" && settings.showSubheading) {
+        settings.h2Colour = colourName;
+      }
+
+      updateHero();
+    }
+
+    // Apply current settings without replacing the editable headings.
+    function updateHero() {
+      settings.darkAppearance = darkAppearanceCheckbox.checked;
+      settings.centreText = centreTextCheckbox.checked;
+      settings.minimumHeight = minimumHeightCheckbox.checked;
+      settings.showSubheading = showSubheadingCheckbox.checked;
+
+      settings.h1Serif = h1SerifCheckbox.checked;
+      settings.h2Serif = h2SerifCheckbox.checked;
+
+      settings.h1LetterSpacing = Number(h1LetterSpacingSlider.value);
+      settings.h2LetterSpacing = Number(h2LetterSpacingSlider.value);
+
+      heroPreview.classList.toggle(
+        "hero-light",
+        !settings.darkAppearance
+      );
+
+      heroPreview.classList.toggle(
+        "hero-dark",
+        settings.darkAppearance
+      );
+
+      heroPreview.classList.toggle(
+        "hero-centre",
+        settings.centreText
+      );
+
+      heroPreview.classList.toggle(
+        "hero-min-height",
+        settings.minimumHeight
+      );
+
+      heroHeading.classList.toggle(
+        "hero-h1-serif",
+        settings.h1Serif
+      );
+
+      heroSubheading.classList.toggle(
+        "hero-h2-serif",
+        settings.h2Serif
+      );
+
+      // The hidden property removes H2 from layout and keyboard navigation.
+      heroSubheading.hidden = !settings.showSubheading;
+
+      // Disable H2 effects when the subheading is hidden.
+      h2SerifCheckbox.disabled = !settings.showSubheading;
+      h2LetterSpacingSlider.disabled = !settings.showSubheading;
+
+      // If H2 was active, switch to Background but preserve H2's colour.
+      if (
+        !settings.showSubheading &&
+        settings.activeColourTarget === "h2"
+      ) {
+        settings.activeColourTarget = "background";
+      }
+
+      updateLetterSpacingStyles();
+      updateHeroColourStyles();
+      updatePaletteInterface();
+      updateGeneratedHtml();
+    }
+
+    // Apply the light or dark preset, resetting all three colours.
+    function applyAppearancePreset() {
+      settings.darkAppearance = darkAppearanceCheckbox.checked;
+
+      if (settings.darkAppearance) {
+        settings.backgroundColour = "slate-900";
+        settings.h1Colour = "slate-50";
+        settings.h2Colour = "slate-300";
+      } else {
+        settings.backgroundColour = "slate-50";
+        settings.h1Colour = "slate-900";
+        settings.h2Colour = "slate-700";
+      }
+
+      updateHero();
+    }
+
+    // Escape special characters so heading text remains plain text in HTML.
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    // Build the standalone page with the latest content and settings.
+    function generateHtml() {
+      const currentHeading = escapeHtml(heroHeading.textContent);
+      const currentSubheading = escapeHtml(heroSubheading.textContent);
+
+      const appearanceClass = settings.darkAppearance
+        ? "hero-dark"
+        : "hero-light";
+
+      const alignmentClass = settings.centreText
+        ? " hero-centre"
+        : "";
+
+      const heightClass = settings.minimumHeight
+        ? " hero-min-height"
+        : "";
+
+      const h1SerifClass = settings.h1Serif
+        ? " hero-h1-serif"
+        : "";
+
+      const h2SerifClass = settings.h2Serif
+        ? " hero-h2-serif"
+        : "";
+
+      // Include H2 only when the subheading checkbox is checked.
+      const subheadingHtml = settings.showSubheading
+        ? `
+      <h2 class="${h2SerifClass.trim()}">${currentSubheading}</h2>`
+        : "";
+
+      // Escape the closing script tag so it cannot end this script early.
+      const tailwindScript =
+        '<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"><\/script>';
+
+      // Include the shared hero CSS, including the current colour rules.
+      const exportedHeroStyles = heroStylesElement.textContent;
+
+      const exportedEffectStyles = `
+.hero h1 {
+  letter-spacing: ${settings.h1LetterSpacing}em;
+}
+
+.hero h2 {
+  letter-spacing: ${settings.h2LetterSpacing}em;
+}`;
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Section</title>
+  <meta name="description" content="Short, unique description of web page. Often used as the snippet shown in search results. About 120 characters is ideal.">
+  ${tailwindScript}
+  <style type="text/tailwindcss">
+${exportedHeroStyles}
+  </style>
+  <style>
+${exportedEffectStyles}
+  </style>
+</head>
+<body>
+  <header class="hero ${appearanceClass}${alignmentClass}${heightClass} hero-custom-colours">
+    <div class="hero-content">
+      <h1 class="${h1SerifClass.trim()}">${currentHeading}</h1>${subheadingHtml}
+    </div>
+  </header>
+</body>
+</html>`;
+    }
+
+    // Keep the manual-copy textarea current after every change.
+    function updateGeneratedHtml() {
+      generatedHtmlTextarea.value = generateHtml();
+    }
+
+    // Display the manual-copy fallback if clipboard access fails.
+    function showManualCopyFallback() {
+      updateGeneratedHtml();
+      fallbackPanel.hidden = false;
+
+      copyStatus.textContent =
+        "Automatic copying is unavailable. Select the HTML below and copy it manually.";
+
+      generatedHtmlTextarea.focus();
+      generatedHtmlTextarea.select();
+    }
+
+    // Copy the latest standalone HTML, handling browser restrictions.
+    async function copyHtml() {
+      updateGeneratedHtml();
+
+      const htmlToCopy = generatedHtmlTextarea.value;
+
+      if (
+        !navigator.clipboard ||
+        typeof navigator.clipboard.writeText !== "function"
+      ) {
+        showManualCopyFallback();
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(htmlToCopy);
+
+        copyStatus.textContent =
+          "HTML copied—paste it into VS Code.";
+
+        fallbackPanel.hidden = true;
+      } catch (error) {
+        showManualCopyFallback();
+      }
+    }
+
+    // Prevent rich-text pastes from introducing markup into headings.
+    function handlePlainTextPaste(event) {
+      event.preventDefault();
+
+      const clipboardData = event.clipboardData;
+
+      if (!clipboardData) {
+        return;
+      }
+
+      const plainText = clipboardData.getData("text/plain");
+      const selection = window.getSelection();
+
+      if (!selection || selection.rangeCount === 0) {
+        return;
+      }
+
+      const activeHeading = document.activeElement;
+
+      if (
+        activeHeading !== heroHeading &&
+        activeHeading !== heroSubheading
+      ) {
+        return;
+      }
+
+      const range = selection.getRangeAt(0);
+
+      if (!activeHeading.contains(range.commonAncestorContainer)) {
+        return;
+      }
+
+      range.deleteContents();
+
+      const textNode = document.createTextNode(plainText);
+      range.insertNode(textNode);
+
+      // Place the caret immediately after the inserted plain text.
+      range.setStartAfter(textNode);
+      range.collapse(true);
+
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      updateGeneratedHtml();
+    }
+
+    // Switch the active colour target.
+    function handleTargetButtonClick(event) {
+      const target = event.currentTarget.dataset.target;
+
+      if (target === "h2" && !settings.showSubheading) {
+        return;
+      }
+
+      settings.activeColourTarget = target;
+      updatePaletteInterface();
+    }
+
+    // Apply a clicked swatch to the currently active target.
+    function handleSwatchClick(event) {
+      const swatch = event.target.closest(".colour-swatch[data-colour]");
+
+      if (!swatch) {
+        return;
+      }
+
+      const colourName = swatch.dataset.colour;
+
+      if (!colourName) {
+        return;
+      }
+
+      setTargetColour(settings.activeColourTarget, colourName);
+    }
+
+    // Reset colours only when the appearance preset changes.
+    darkAppearanceCheckbox.addEventListener(
+      "change",
+      applyAppearancePreset
+    );
+
+    // Other layout controls do not reset custom colours.
+    centreTextCheckbox.addEventListener("change", updateHero);
+    minimumHeightCheckbox.addEventListener("change", updateHero);
+    showSubheadingCheckbox.addEventListener("change", updateHero);
+
+    h1SerifCheckbox.addEventListener("change", updateHero);
+    h2SerifCheckbox.addEventListener("change", updateHero);
+
+    // Update the preview immediately as sliders move.
+    h1LetterSpacingSlider.addEventListener("input", updateHero);
+    h2LetterSpacingSlider.addEventListener("input", updateHero);
+
+    // Update exported HTML whenever either heading changes.
+    heroHeading.addEventListener("input", updateGeneratedHtml);
+    heroSubheading.addEventListener("input", updateGeneratedHtml);
+
+    heroHeading.addEventListener("paste", handlePlainTextPaste);
+    heroSubheading.addEventListener("paste", handlePlainTextPaste);
+
+    targetBackgroundButton.addEventListener(
+      "click",
+      handleTargetButtonClick
+    );
+
+    targetH1Button.addEventListener(
+      "click",
+      handleTargetButtonClick
+    );
+
+    targetH2Button.addEventListener(
+      "click",
+      handleTargetButtonClick
+    );
+
+    // One delegated listener handles every generated palette swatch.
+    paletteGrid.addEventListener("click", handleSwatchClick);
+
+    document
+      .querySelector(".palette-special-colours")
+      .addEventListener("click", handleSwatchClick);
+
+    copyHtmlButton.addEventListener("click", copyHtml);
+
+    // Build the palette and apply the initial light preset.
+    buildColourPalette();
+    updateHero();
+  </script>
+
+  <!-- Colour chips use a separate CSS rule instead of inline styling. -->
+  <style id="active-colour-chip-styles">
+    .active-colour-chip {
+      background-color: var(--color-slate-50);
+    }
+  </style>
+
+  <script>
+    // Keep the active colour chip in sync using stylesheet rules.
+    const activeColourChipStyles =
+      document.getElementById("active-colour-chip-styles");
+
+    const originalUpdatePaletteInterface = updatePaletteInterface;
+
+    updatePaletteInterface = function () {
+      originalUpdatePaletteInterface();
+
+      const activeColour = getTargetColour(settings.activeColourTarget);
+
+      activeColourChipStyles.textContent = `
+        .active-colour-chip {
+          background-color: var(--color-${activeColour});
+        }
+      `;
+    };
+
+    updatePaletteInterface();
+  </script>
+</body>
+</html>

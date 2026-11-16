@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Block - Version 3</title>
+  <meta name="description" content="A hero section with custom solid background and heading colours, created with my Hero Block Generator.">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+
+        .hero {
+          @apply flex flex-col justify-center px-6 py-16 md:px-12 md:py-20;
+        }
+
+        .hero-light {
+          @apply bg-slate-50;
+        }
+
+        .hero-dark {
+          @apply bg-slate-900;
+        }
+
+        .hero-centre {
+          @apply text-center;
+        }
+
+        .hero-min-height {
+          @apply min-h-[480px] md:min-h-[85vh];
+        }
+
+        .hero-content {
+          @apply w-full max-w-5xl;
+        }
+
+        .hero h1 {
+          @apply max-w-5xl font-sans text-4xl font-bold leading-tight tracking-tight break-words md:text-6xl;
+        }
+
+        .hero h2 {
+          @apply mt-6 max-w-3xl font-sans text-lg leading-relaxed break-words md:text-2xl;
+        }
+
+        .hero h1.hero-h1-serif {
+          @apply font-serif;
+        }
+
+        .hero h2.hero-h2-serif {
+          @apply font-serif;
+        }
+
+        .hero-light h1 {
+          @apply text-slate-900;
+        }
+
+        .hero-light h2 {
+          @apply text-slate-700;
+        }
+
+        .hero-dark h1 {
+          @apply text-slate-50;
+        }
+
+        .hero-dark h2 {
+          @apply text-slate-300;
+        }
+
+        .hero-centre .hero-content {
+          @apply mx-auto;
+        }
+
+        .hero-centre h1,
+        .hero-centre h2 {
+          @apply mx-auto;
+        }
+
+        /* Custom colours override preset background and text colours. */
+        .hero.hero-custom-colours {
+          background-color: var(--color-slate-300);
+        }
+
+        .hero.hero-custom-colours h1 {
+          color: var(--color-fuchsia-400);
+        }
+
+        .hero.hero-custom-colours h2 {
+          color: var(--color-slate-700);
+        }
+
+        .hero h2[hidden] {
+          display: none !important;
+        }
+      
+  </style>
+  <style>
+
+.hero h1 {
+  letter-spacing: -0.05em;
+}
+
+.hero h2 {
+  letter-spacing: -0.03em;
+}
+  </style>
+</head>
+<body>
+  <header class="hero hero-light hero-centre hero-min-height hero-custom-colours">
+    <div class="hero-content">
+      <h1 class="hero-h1-serif">Lorem ipsum dolor sit amet</h1>
+      <h2 class="hero-h2-serif">Consectetur adipiscing elit. Integer vitae libero ac risus egestas placerat.</h2>
+    </div>
+  </header>
+</body>
+</html>

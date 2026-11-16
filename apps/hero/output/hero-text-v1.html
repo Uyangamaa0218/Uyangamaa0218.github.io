@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero Block - Version 1/title>
+<meta name="description" content="A simple hero section with an editable heading and subheading, created with my Hero Block Generator">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+
+    .hero {
+      @apply flex flex-col justify-center px-6 py-16 md:px-12 md:py-20;
+    }
+
+    .hero-light {
+      @apply bg-slate-50;
+    }
+
+    .hero-dark {
+      @apply bg-slate-900;
+    }
+
+    .hero-centre {
+      @apply text-center;
+    }
+
+    .hero-min-height {
+      @apply min-h-[480px] md:min-h-[85vh];
+    }
+
+    .hero-content {
+      @apply w-full max-w-5xl;
+    }
+
+    .hero h1 {
+      @apply max-w-5xl text-4xl font-bold leading-tight tracking-tight break-words md:text-6xl;
+    }
+
+    .hero h2 {
+      @apply mt-6 max-w-3xl text-lg leading-relaxed break-words md:text-2xl;
+    }
+
+    .hero-light h1 {
+      @apply text-slate-900;
+    }
+
+    .hero-light h2 {
+      @apply text-slate-700;
+    }
+
+    .hero-dark h1 {
+      @apply text-slate-50;
+    }
+
+    .hero-dark h2 {
+      @apply text-slate-300;
+    }
+
+    .hero-centre .hero-content {
+      @apply mx-auto;
+    }
+
+    .hero-centre h1,
+    .hero-centre h2 {
+      @apply mx-auto;
+    }
+
+    /* Respect the native hidden property in every supported layout. */
+    .hero h2[hidden] {
+      display: none !important;
+    }
+  
+  </style>
+</head>
+<body>
+  <header class="hero hero-light hero-centre hero-min-height">
+    <div class="hero-content">
+      <h1>Design your next adventure</h1>
+          <h2>Create a hero block with your own text and styles.</h2>
+    </div>
+  </header>
+</body>
+</html>
